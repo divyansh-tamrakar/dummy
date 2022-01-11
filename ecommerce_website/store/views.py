@@ -7,7 +7,14 @@ import json
 
 def store(request):
     products = Product.objects.all()
-    context = {'products': products}
+    customer = request.user.customer
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    items = order.orderitem_set.all()
+    number = 0
+    for item in items:
+        
+        number += item.quantity
+    context = {'products': products, 'number': number}
     return render(request, 'store/store.html', context)
 
 
@@ -58,4 +65,20 @@ def updateItem(request):
 
     print('productId: ', productId)
     print('Action: ', action)
+
+    customer = request.user.customer
+    product = Product.objects.get(id=productId)
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+
+    orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
+
+    if action == 'add':
+        orderItem.quantity = (orderItem.quantity + 1)
+    elif action == 'remove':
+        orderItem.quantity = (orderItem.quantity - 1)
+
+    orderItem.save()
+
+    if orderItem.quantity <= 0:
+        orderItem.delete()
     return JsonResponse('Item was added', safe=False)
