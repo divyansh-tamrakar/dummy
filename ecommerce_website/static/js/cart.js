@@ -8,9 +8,9 @@ for (var i = 0; i < updateBtns.length; i++) {
 
         console.log('USER:', user)
         if (user === 'AnonymousUser') {
-            console.log('Anonymous User')
+            console.log('Not Logged In')
         } else {
-            console.log('Welcome back,', user)
+            updateUserOrder(productId, action)
         }
     })
 }
