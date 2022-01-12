@@ -6,15 +6,23 @@ import json
 
 
 def store(request):
-    products = Product.objects.all()
-    customer = request.user.customer
-    order, created = Order.objects.get_or_create(customer=customer, complete=False)
-    items = order.orderitem_set.all()
-    number = 0
-    for item in items:
+    if request.user.is_authenticated:
         
-        number += item.quantity
-    context = {'products': products, 'number': number}
+        customer = request.user.customer
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderitem_set.all()
+        # number = 0
+        # for item in items:
+            
+        #     number += item.quantity
+        cartItems = order.get_cart_items
+    else:
+        items = []
+        order = {'get_cart_items': 0, 'get_cart_total': 0, 'shipping': False}
+        cartItems = order['get_cart_items']
+
+    products = Product.objects.all()
+    context = {'products': products, 'number': cartItems}
     return render(request, 'store/store.html', context)
 
 
@@ -24,16 +32,18 @@ def cart(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
-
+        cartItems = order.get_cart_items
     else:
         items = []
+        order = {'get_cart_items': 0, 'get_cart_total': 0}
+        cartItems = order['get_cart_items']
     total = 0
     number = 0
     for item in items:
         total += item.product.price * item.quantity
         number += item.quantity
-
-    context = {'items': items, 'total': total, 'number': number}
+    
+    context = {'items': items, 'total': total, 'number': cartItems}
     return render(request, 'store/cart.html', context)
 
 
@@ -42,16 +52,18 @@ def checkout(request):
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
-
+        cartItems = order.get_cart_items
     else:
         items = []
+        order = {'get_cart_items': 0, 'get_cart_total': 0}
+        cartItems = order['get_cart_items']
     total = 0
     number = 0
     for item in items:
         total += item.product.price * item.quantity
         number += item.quantity
 
-    context = {'items': items, 'total': total, 'number': number}
+    context = {'items': items, 'total': total, 'number': cartItems}
 
     return render(request, 'store/checkout.html', context)
 
