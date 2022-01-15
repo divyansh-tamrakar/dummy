@@ -22,6 +22,15 @@
 
         <br>
 
+        {% if number == 0 %}
+        <div class="box-element">
+            <div class="cart-row">
+                <div style="flex: 2"></div>
+                <div style="flex: 2"><strong>Empty Cart</strong></div>
+            </div>
+        </div>
+
+        {% else %}
         <div class="box-element">
             <div class="cart-row">
                 <div style="flex: 2"></div>
@@ -50,6 +59,7 @@
             </div>
             {% endfor %}
         </div>
+        {% endif %}
     </div>
 </div>
 
