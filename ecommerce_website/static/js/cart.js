@@ -33,6 +33,7 @@ function addCookieItem(productId, action) {
             console.log("item will be deleted")
             delete cart[productId]
         }
+
     }
     console.log("Cart:", cart)
 
