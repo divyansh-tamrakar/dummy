@@ -144,6 +144,8 @@
 				console.log("success:", data);
 				console.log("CSRFToken:", csrfToken);
 				alert("Transaction Completed!");
+				cart = {}
+				document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/"
 				window.location.href = "{% url 'home' %}"	
 			})
 		}
