@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+{% extends 'store/main.html' %}
+{% load static %}
+
+{% block content %}
+
+    <h3> User Login Page </h3>
+    <div class="form-field"
+        <form method="POST" action="">
+            {% csrf_token %}
+
+            <div class="form-field">
+                <input required class="form-control" type="text" id="name" name="name" placeholder="Name..">
+            </div>
+
+            <div class="form-field">
+                <input required class="form-control" type="password" id="password" name="password" placeholder="Password">
+            </div>
+
+            <br>
+            <br>
+            <input class="btn btn-success btn-block" type="submit" name="submit" value="Login">
+        </form>
+
+    <div>
+    <br>
+    <a href="#">Don't have an account? Sign Up </a>
+{% endblock content %}
+

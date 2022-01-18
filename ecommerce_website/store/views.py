@@ -1,12 +1,39 @@
-from math import prod
-from django.shortcuts import render
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+from matplotlib.style import context
 from .models import *
 from django.http import JsonResponse
 import json
 import datetime
 from .utils import cookieCart, cartData, guestOrder
+from .forms import UserRegistrationForm
 # Create your views here.
 
+def Userlogin(request):
+    page = "login"
+
+    if request.method == "POST":
+        
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirmPassword = request.POST.get('confirmPassword')
+
+        if User.objects.get(username=username) is None:
+            return messages.error(request, "User does not exists!")
+
+        else:
+            user = authenticate(request, username=username, password=password)
+        
+        if user:
+            login(request, user)
+            return redirect('home')
+        else:
+            return messages.error(request, "Incorrect username or password.")
+    context = {'page': page}
+    return render(request, 'store/login.html', context)
 
 def store(request):
     

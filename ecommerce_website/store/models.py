@@ -1,3 +1,4 @@
+from statistics import mode
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -92,3 +93,16 @@ class ShippingAddress(models.Model):
 
     def __str__(self):
         return self.address
+
+
+class UserForm(models.Model):
+
+    username = models.CharField(max_length=100)
+    password = models.TextField()
+    confirmPassword = models.TextField()
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
+    address = models.ForeignKey(ShippingAddress, on_delete=models.SET_NULL, blank = True, null = True)
+    email = models.EmailField(max_length=200)
+
+    def __str__(self):
+        return self.username
