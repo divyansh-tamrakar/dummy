@@ -98,8 +98,8 @@ class ShippingAddress(models.Model):
 class UserForm(models.Model):
 
     username = models.CharField(max_length=100)
-    password = models.TextField()
-    confirmPassword = models.TextField()
+    password1 = models.CharField(max_length=100)
+    password2 = models.CharField(max_length=100)
     customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
     address = models.ForeignKey(ShippingAddress, on_delete=models.SET_NULL, blank = True, null = True)
     email = models.EmailField(max_length=200)

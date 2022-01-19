@@ -8,7 +8,7 @@ from django.http import JsonResponse
 import json
 import datetime
 from .utils import cookieCart, cartData, guestOrder
-from .forms import UserRegistrationForm
+from .forms import NewUserForm
 # Create your views here.
 
 def Userlogin(request):
@@ -17,12 +17,10 @@ def Userlogin(request):
     if request.method == "POST":
         
         username = request.POST.get('username')
-        email = request.POST.get('email')
         password = request.POST.get('password')
-        confirmPassword = request.POST.get('confirmPassword')
-
+    
         if User.objects.get(username=username) is None:
-            return messages.error(request, "User does not exists!")
+            messages.error(request, "User does not exists!")
 
         else:
             user = authenticate(request, username=username, password=password)
@@ -31,9 +29,33 @@ def Userlogin(request):
             login(request, user)
             return redirect('home')
         else:
-            return messages.error(request, "Incorrect username or password.")
+            messages.error(request, "Incorrect username or password.")
     context = {'page': page}
     return render(request, 'store/login.html', context)
+
+
+def signup(request):
+
+    page = "signup"
+
+    if request.method == "POST":
+        form = NewUserForm(request.POST)
+        if form.is_valid():
+            newuser = form.save()
+            login(request, newuser)
+            messages.success(request, "User login successful.")
+            return redirect('home')
+        messages.error(request, "Unsuccessful registration.")
+
+    form = NewUserForm()
+    context = {'page': page, 'form': form}
+
+    return render(request, 'store/login.html', context)
+        
+def logoutUser(request):
+
+    logout(request)
+    return redirect('home')
 
 def store(request):
     
